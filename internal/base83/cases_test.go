@@ -50,6 +50,24 @@ var encodeTests = []base83EncodeTest[string]{
 			err: base83.ErrInvalidLength(-3),
 		},
 	},
+	{
+		description: "percent symbol",
+		input:       255172974336,
+		length:      6,
+		expected: result[string]{
+			out: "%%%%%%",
+			err: nil,
+		},
+	},
+	{
+		description: "random",
+		input:       6869,
+		length:      2,
+		expected: result[string]{
+			out: "~$",
+			err: nil,
+		},
+	},
 }
 
 var decodeTests = []base83DecodeTest[int]{
@@ -83,6 +101,22 @@ var decodeTests = []base83DecodeTest[int]{
 		expected: result[int]{
 			out: 0,
 			err: base83.ErrInvalidCha('µ'),
+		},
+	},
+	{
+		description: "percent symbols",
+		input:       "%%%%%%",
+		expected: result[int]{
+			out: 255172974336,
+			err: nil,
+		},
+	},
+	{
+		description: "random",
+		input:       "~$",
+		expected: result[int]{
+			out: 6869,
+			err: nil,
 		},
 	},
 }

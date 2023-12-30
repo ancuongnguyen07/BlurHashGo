@@ -6,7 +6,8 @@ import (
 	"os"
 	"testing"
 
-	blurhash "github.com/ancuongnguyen07/BlurHashGo"
+	"github.com/ancuongnguyen07/BlurHashGo/blurhash"
+	"github.com/ancuongnguyen07/BlurHashGo/internal/utils"
 )
 
 func TestEncodeImgFile(t *testing.T) {
@@ -18,21 +19,21 @@ func TestEncodeImgFile(t *testing.T) {
 	}{
 		{
 			description: "Ice Cream",
-			filePath:    "./imgs/ice-cream.png",
+			filePath:    "../imgs/ice-cream.png",
 			xComp:       4,
 			yComp:       3,
 			expected:    "LORnoQT}}gs6?aw@M{N0xBN2J=xt",
 		},
 		{
 			description: "Pizza",
-			filePath:    "./imgs/pizza.png",
+			filePath:    "../imgs/pizza.png",
 			xComp:       4,
 			yComp:       3,
 			expected:    "LVGtcy~9IqoLxYo3afWB0#EMs.WC",
 		},
 		{
 			description: "Salad",
-			filePath:    "./imgs/salad.png",
+			filePath:    "../imgs/salad.png",
 			xComp:       4,
 			yComp:       3,
 			expected:    "LOD+VQIU0mWU^MNHI[WYa0bIShj[",
@@ -40,7 +41,7 @@ func TestEncodeImgFile(t *testing.T) {
 		{
 			// reference from https://github.com/bbrks/go-blurhash/tree/master
 			description: "Dall-E",
-			filePath:    "./imgs/dalle.png",
+			filePath:    "../imgs/dalle.png",
 			xComp:       5,
 			yComp:       5,
 			expected:    "eaF#5R0#WBjYR+58-nWCWBn~bIsTbbayjFWof8jFj[WX-nNHR*jss.",
@@ -48,7 +49,7 @@ func TestEncodeImgFile(t *testing.T) {
 		{
 			// reference from https://github.com/bbrks/go-blurhash/tree/master
 			description: "Octocat",
-			filePath:    "./imgs/octocat.png",
+			filePath:    "../imgs/octocat.png",
 			xComp:       4,
 			yComp:       3,
 			expected:    "LNAdApj[00aymkj[TKay9}ay-Sj[",
@@ -57,24 +58,10 @@ func TestEncodeImgFile(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.description, func(t *testing.T) {
-			f, err := os.Open(tc.filePath)
+			img, err := utils.ReadImgFile(tc.filePath)
 			if err != nil {
-				t.Fatalf("error while opening file: %s", tc.filePath)
+				t.Fatalf("failed to read PNG file: %v", err)
 			}
-			defer f.Close()
-
-			if f == nil {
-				t.Fatalf("image file should not be nil: %s", tc.filePath)
-			}
-
-			img, err := png.Decode(f)
-			if err != nil {
-				t.Fatalf("error while decoding the image at: %s | %s", tc.filePath, err)
-			}
-			if img == nil {
-				t.Fatalf("the decoded image should not be nil")
-			}
-
 			hash, err := blurhash.Encode(tc.xComp, tc.yComp, img)
 			if err != nil {
 				t.Fatalf("failed to encode img into blurhash")
@@ -125,7 +112,7 @@ func TestWrongComponents(t *testing.T) {
 			}
 			err, ok := err.(blurhash.ErrInvalidComps)
 			if !ok {
-				t.Fatalf("error type ErrInvalidComps should be through | got %s", err)
+				t.Fatalf("error type ErrInvalidComps should be through | got %v", err)
 			}
 		})
 	}

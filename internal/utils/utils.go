@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"image"
 	"image/jpeg"
 	"image/png"
@@ -43,7 +42,7 @@ func ReadImgFile(filePath string) (image.Image, error) {
 	defer f.Close()
 
 	if f == nil {
-		return nil, fmt.Errorf("empty file: %s", filePath)
+		return nil, ErrEmptyFile(filePath)
 	}
 
 	// Check if the image file is PNG or JPG
@@ -59,9 +58,9 @@ func ReadImgFile(filePath string) (image.Image, error) {
 	} else if kind.Extension == "jpg" {
 		img, err = jpeg.Decode(f)
 	} else if kind == filetype.Unknown {
-		return nil, fmt.Errorf("unknown file type")
+		return nil, ErrUnknownFileType(filePath)
 	} else {
-		return nil, fmt.Errorf("unsupported file type")
+		return nil, ErrUnsupportedFile(filePath)
 	}
 
 	if err != nil {

@@ -1,4 +1,4 @@
-BIN_FILE_NAME=blurhash_cli
+BIN_FILE_NAME=blurhash-cli
 BUILD_DIR=build
 
 all: build test

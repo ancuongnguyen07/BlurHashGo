@@ -27,9 +27,6 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-    - name: Unittest
-      run: go test -v ./...
-
     - name: CLI test
       run: cd cli && make && make clean
 

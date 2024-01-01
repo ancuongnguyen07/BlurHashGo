@@ -7,7 +7,7 @@ build:
 	go build -o ${BUILD_DIR}/${BIN_FILE_NAME}
 
 test:
-	go test ../...
+	go test -v ../...
 	./test_script.sh
 
 clean:

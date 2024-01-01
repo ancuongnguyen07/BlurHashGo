@@ -1,0 +1,37 @@
+name: Go
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v3
+
+    - name: Set up Go 1.21
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21'
+
+    - name: Get dependencies
+      run: go mod download -json
+
+    - name: Install staticcheck
+      run: go install honnef.co/go/tools/cmd/staticcheck@latest
+
+    - name: Build
+      run: go build -v ./...
+
+    - name: Unittest
+      run: go test -v ./...
+
+    - name: CLI test
+      run: cd cli && make && make clean
+
+    - name: Vet
+      run: go vet ./...
+
+    - name: staticcheck
+      run: staticcheck ./...

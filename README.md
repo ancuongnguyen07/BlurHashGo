@@ -65,10 +65,10 @@ For more detailed documentation, refer to [Godoc](https://pkg.go.dev/github.com/
 ### Installation
 You can build locally by running the following commands:
 ```bash
-git clone https://github.com/ancuongnguyen07/BlurHashGo & cd BlurHashGo
-cd cli
-make
-./build/blurhash-cli # run the executable binary file
+git clone https://github.com/ancuongnguyen07/BlurHashGo
+cd BlurHashGo
+make -C cli
+cli/build/blurhash-cli # run the executable binary file
 ```
 The executable file `blurhash-cli` should be available in the folder `build`.
 
